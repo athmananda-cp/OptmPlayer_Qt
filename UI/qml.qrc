@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/startup.qml</file>
+        <file>qml/PlayerButton.qml</file>
+        <file>qml/PlayerTextField.qml</file>
+        <file>qml/UpdateInfoDialog.qml</file>
+        <file>qml/UpdatePathDialog.qml</file>
+        <file>qml/UpdateProgressDialog.qml</file>
+        <file>qml/UpdateCompleteDialog.qml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>images/rectangle.svg</file>
+    </qresource>
+</RCC>

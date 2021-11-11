@@ -1,0 +1,140 @@
+import QtQuick 2.4
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.0
+
+Item {
+    id: item1
+    width: 1000
+    height: 200
+    opacity: 1
+
+    AnimatedImage {
+        id: img
+        anchors.fill: parent
+        source: "qrc:/images/images/rectangle.svg"
+
+//        property bool rounded: true
+//        property bool adapt: true
+
+//        layer.enabled: rounded
+//        layer.effect: OpacityMask {
+//            maskSource: Item {
+//                width: img.width
+//                height: img.height
+//                Rectangle {
+//                    anchors.centerIn: parent
+//                    width: img.adapt ? img.width : Math.min(img.width, img.height)
+//                    height: img.adapt ? img.height : width
+//                    radius: 12
+//                }
+//            }
+//        }
+    }
+
+    Label {
+        x: 20
+        y: 20
+        text: "Enter a path or find a file on your system"
+        color: "white"
+        font.pointSize: 20
+    }
+
+    TextField {
+        id: path
+        x: 20
+        y: 80
+        width: 650
+        font.pointSize: 15
+    }
+
+    Text {
+        x: 700
+        y: 80
+        text: "or"
+        color: "white"
+        font.pointSize: 15
+    }
+
+    Button {
+        id: bFind
+        x: 740
+        y: 80
+        text: "Find on your system"
+        font.pointSize: 15
+    }
+
+    Button {
+        x: 600
+        y: 150
+        text: "Cancel"
+        font.pointSize: 15
+    }
+
+    Button {
+        x: 800
+        y: 150
+        text: "Open"
+        font.pointSize: 15
+    }
+}
+
+//ColumnLayout {
+//    id: column
+//    Layout.alignment: Qt.AlignTop
+//    anchors.fill: parent
+//    anchors.margins: 20
+
+//    ColumnLayout {
+//        height: 100
+//        Layout.alignment: Qt.AlignTop
+//        Layout.fillWidth: true
+//        anchors.margins: 10
+
+//        Label {
+//            text: "Enter a path or find a file on your system"
+//            color: "white"
+//            font.pointSize: 20
+//        }
+
+//        RowLayout {
+//            Layout.fillWidth: true
+//            Layout.margins: 10
+
+//            TextField {
+//                id: path
+//                width: 600
+//                font.pointSize: 15
+//            }
+
+//            Text {
+//                text: "or"
+//                color: "white"
+//                font.pointSize: 15
+//            }
+
+//            Button {
+//                id: bFind
+//                text: "Find on your system"
+//                font.pointSize: 15
+//            }
+//        }
+//    }
+//}
+
+//RowLayout {
+//    height: 50
+//    anchors.margins: 5
+//    Layout.fillWidth: true
+//    Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+
+//    Button {
+//        text: "Cancel"
+//        font.pointSize: 15
+//    }
+
+//    Button {
+//        text: "Open"
+//        font.pointSize: 15
+//    }
+//}
