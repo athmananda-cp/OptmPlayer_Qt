@@ -18,23 +18,18 @@ void NetworkManager::getHCasterIpAddress()
     connect(request, &IRequest::requestCompleted, this, [this, request](IRequest::Status status) {
         switch (status)
         {
-        case IRequest::Status::TimedOut:
-        {
-            qDebug() << "Request to get HCaster Ip address timed out";
+            case IRequest::Status::Success:
+            {
+                getListObjects();
+            }
+            break;
+            case IRequest::Status::TimedOut:
+            case IRequest::Status::Failed:
+            {
+                qDebug() << "Failed to get Homecaster IP  " ;
+            }
             break;
         }
-        case IRequest::Status::Success:
-        {
-            getListObjects();
-            break;
-        }
-        case IRequest::Status::Failed:
-        {
-            qDebug() << "Request to get HCaster Ip address failed";
-            break;
-        }
-        }
-
         delete request;
     });
     request->execute();
@@ -46,21 +41,17 @@ void NetworkManager::getListObjects()
     connect(request, &IRequest::requestCompleted, this, [this, request](IRequest::Status status) {
         switch (status)
         {
-        case IRequest::Status::TimedOut:
-        {
-            qDebug() << "Request to get List of objects timed out";
+            case IRequest::Status::Success:
+            {
+                emit listOfObjectsAvailable();
+            }
             break;
-        }
-        case IRequest::Status::Success:
-        {
-            emit listOfObjectsAvailable();
-            break;
-        }
-        case IRequest::Status::Failed:
-        {
-            qDebug() << "Request to get List of objects failed";
-            break;
-        }
+            case IRequest::Status::TimedOut:
+            case IRequest::Status::Failed:
+            {
+                qDebug() << "Request to get List of objects timed out/failed";
+            }
+           break;
         }
 
         delete request;

@@ -44,33 +44,26 @@ void GetHomeCasterIpAddressRequest::onFinished(QNetworkReply *reply)
 
 void GetHomeCasterIpAddressRequest::handleResponse(QByteArray response)
 {
+    IRequest::Status retvalue = Status::Failed;
     qDebug() << "GetHomeCasterIpAddressRequest response : " << response;
-    if (response.isEmpty())
-    {
-        qDebug() << "Failed to get HC IP. Response is empty.";
-        emit requestCompleted(Status::Failed);
-        return;
+    if (!response.isEmpty())
+    {   
+        QJsonParseError error;
+        QJsonDocument document = QJsonDocument::fromJson(response, &error);
+        if (error.error == QJsonParseError::NoError)
+        {
+            if (document.isArray())
+            {
+                QJsonArray ipArray = document.array();
+                QVariantList ipList = ipArray.toVariantList();
+                if(ipList.size()>0)
+                {
+                    QVariantMap ipMap = ipList.at(0).toMap();
+                    qApp->hCasterInfo()->IpAddress = ipMap["client_addr"].toString();
+                    retvalue =Status::Success;
+                }
+            }
+        }
     }
-
-    QJsonParseError error;
-    QJsonDocument document = QJsonDocument::fromJson(response, &error);
-    if (error.error != QJsonParseError::NoError)
-    {
-        qDebug() << "Error string : " << error.errorString();
-        emit requestCompleted(Status::Failed);
-        return;
-    }
-
-    if (! document.isArray())
-    {
-        qDebug() << "Invalid json";
-        emit requestCompleted(Status::Failed);
-        return;
-    }
-    QJsonArray ipArray = document.array();
-    QVariantList ipList = ipArray.toVariantList();
-    QVariantMap ipMap = ipList.at(0).toMap();
-    qApp->hCasterInfo()->IpAddress = ipMap["client_addr"].toString();
-
-    emit requestCompleted(Status::Success);
+    emit requestCompleted(retvalue);
 }
