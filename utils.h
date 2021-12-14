@@ -4,6 +4,6 @@
 #include "commontypes.h"
 
 const VersionInfo_t readCurrentVersionInfo();
-
+void updateVersionInfo(const SwUpdateInfo_t);
 
 #endif // UTILS_H

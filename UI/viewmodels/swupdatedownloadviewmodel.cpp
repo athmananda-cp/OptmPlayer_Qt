@@ -51,6 +51,8 @@ uint8_t SwUpdateDownloadViewModel::downloadedPercent()
 
 void SwUpdateDownloadViewModel::onBinaryDownloadStarted()
 {
+    emit swUpdatedDownloadStarted();
+
     m_totalSize = m_dataModel->swUpdateInfo()._BinarySize;
     m_elapsedTimer.start();
 
@@ -60,13 +62,13 @@ void SwUpdateDownloadViewModel::onBinaryDownloadStarted()
     emit remainingStatusChanged();
 }
 
-void SwUpdateDownloadViewModel::onDownloadProgressChanged(const float downloadedSize)
+void SwUpdateDownloadViewModel::onDownloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal)
 {
-    if (downloadedSize == 0)
+    if (bytesReceived == 0 || bytesTotal == 0)
         return;
 
-    m_downloadedSize = downloadedSize;
-    m_downloadedPercentage = m_downloadedSize / (m_totalSize / 100);
+    m_downloadedSize = bytesReceived;
+    m_downloadedPercentage = m_downloadedSize / (bytesTotal / 100);
 
     emit titleChanged();
     emit completionStatusChanged();
@@ -83,4 +85,6 @@ void SwUpdateDownloadViewModel::onBinaryDownloadCompleted()
     emit completionStatusChanged();
     emit downloadedPercentChanged();
     emit remainingStatusChanged();
+
+    emit swUpdateDownloadCompleted();
 }

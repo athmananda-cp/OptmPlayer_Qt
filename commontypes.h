@@ -3,8 +3,45 @@
 
 #include <cstdint>
 #include <QString>
+#include <QStringList>
 #include <QMetaType>
 
+/*-------------------------------------------------------------------------------
+ * Structures for data received from homecaster REST APIs
+  -----------------------------------------------------------------------------*/
+typedef struct objectInfo
+{
+    QString             Url;
+    QString             AppContextIdList;
+    long                ContentLength;
+    QString             ContentLocation;
+    QString             ContentType;
+    QString             DownloadStatus;
+    long                Expires;
+    long                NumOfBytesReceived;
+    long                ReceivedTime;
+    long                TransferLength;
+} ObjectInfo_t;
+
+typedef struct upgradeInfo
+{
+    int                 MajorVersion;
+    int                 MinorVersion;
+    QStringList         ListOfChanges;
+    ObjectInfo_t        UpgradeImageObjectInfo;
+} UpgradeInfo_t;
+
+typedef struct hcasterInfo
+{
+    QString             IpAddress;
+    QList<ObjectInfo_t> ObjectInfoList;
+    UpgradeInfo_t       UpgradeInfo;
+} HCasterInfo_t;
+
+
+/*-------------------------------------------------------------------------------
+ * Structures for UI
+  -----------------------------------------------------------------------------*/
 typedef struct versionInfo
 {
     Q_GADGET
@@ -19,7 +56,7 @@ public:
 
     bool equals(const struct versionInfo vInfo);
     bool operator !=(const struct versionInfo);
-}VersionInfo_t;
+} VersionInfo_t;
 Q_DECLARE_METATYPE(VersionInfo_t);
 
 typedef struct swUpdateInfo
@@ -33,7 +70,7 @@ public:
     VersionInfo_t     _VersionInfo;
     QString           _Enhancements;
     float             _BinarySize;
-}SwUpdateInfo_t;
+} SwUpdateInfo_t;
 Q_DECLARE_METATYPE(SwUpdateInfo_t);
 
 #endif // COMMONTYPES_H

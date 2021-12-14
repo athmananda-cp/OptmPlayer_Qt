@@ -19,23 +19,6 @@ public:
     Q_INVOKABLE void downloadUpdate();
     Q_INVOKABLE void installUpdate();
 
-signals:
-    void swUpdateCheckStarted();
-    void swUpdateCheckFailed();
-    void swUpdateAvailable();
-    void swUpdateCheckCompleted();
-
-    void swUpdatedDownloadStarted();
-    void swUpdateDownloadFailed();
-    void swUpdateDownloadCompleted();
-
-    void swUpdateInstallationStarted();
-    void swUpdateInstallationFailed();
-    void swUpdateInstallationCompleted();
-
-private slots:
-    void onSwUpdateAvaialble(const SwUpdateInfo_t &swUpdateInfo);
-
 private:
     QSharedPointer<SwUpdateDataModel> m_updateDataModel {nullptr};
     SwUpdateInfoViewModel *m_updateInfoViewModel {nullptr};

@@ -2,7 +2,7 @@
 #define SWUPDATEDATAMODEL_H
 
 #include <QObject>
-#include "deviceconnect.h"
+#include "commontypes.h"
 
 class SwUpdateDataModel : public QObject
 {
@@ -16,22 +16,20 @@ public:
 
     const SwUpdateInfo_t &swUpdateInfo() const;
 
-private slots:
-    void onSwVersionInfoAvailable(const SwUpdateInfo_t &swUpdateInfo);
-
 signals:
+    void checkForSwUpdateStarted();
     void swUpdateAvaialble(const SwUpdateInfo_t &swUpdateInfo);
+    void checkForSwUpdateCompleted(bool status, QString message);
 
     void binaryDownloadStarted();
-    void downloadProgressChanged(const float downloadedSize);
-    void binaryDownloadCompleted();
+    void downloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
+    void binaryDownloadCompleted(bool status, QString message);
 
     void swUpdateInstallationStarted();
     void swUpdateInstallationProgressChanged(const float installedSize);
-    void swUpdateInstallationCompleted();
+    void swUpdateInstallationCompleted(bool status, QString message);
 
 private:
-    DeviceConnect  m_deviceConnect;
     SwUpdateInfo_t m_swUpdateInfo;
 };
 

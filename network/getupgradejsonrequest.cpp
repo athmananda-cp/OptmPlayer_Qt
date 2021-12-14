@@ -32,7 +32,7 @@ GetUpgradeJsonRequest::GetUpgradeJsonRequest(QObject *parent)
 
 void GetUpgradeJsonRequest::execute()
 {
-    for (auto objInfo : qApp->networkManager()->hCasterInfo()->ObjectInfoList)
+    for (auto objInfo : qApp->hCasterInfo()->ObjectInfoList)
     {
         if (objInfo.AppContextIdList != "UpgradeImage")
             continue;
@@ -75,6 +75,13 @@ void GetUpgradeJsonRequest::onFinished(QNetworkReply *reply)
 
 void GetUpgradeJsonRequest::handleResponse(QByteArray response)
 {
+    if (response.isEmpty())
+    {
+        qDebug() << "Failed to get upgrade json. Response is empty.";
+        emit requestCompleted(Status::Failed);
+        return;
+    }
+
     QJsonParseError error;
     QJsonDocument document = QJsonDocument::fromJson(response, &error);
     if (error.error != QJsonParseError::NoError)
@@ -85,17 +92,40 @@ void GetUpgradeJsonRequest::handleResponse(QByteArray response)
     }
 
     // Find the object info for given image and update the upgrade info
-    QJsonObject jObjRoot = document.object();
-    for (auto infoObj : qApp->networkManager()->hCasterInfo()->ObjectInfoList)
+    if (! document.isArray())
     {
-        if (infoObj.Url.endsWith(jObjRoot["imageName"].toString()))
+        qDebug() << "Error : Expected json array ... not found.";
+        emit requestCompleted(Status::Failed);
+        return;
+    }
+    QJsonObject jObjRoot;
+    foreach (const QJsonValue & v, document.array())
+    {
+        QJsonObject jsonObject = v.toObject();
+        if (jsonObject["platform"].toString() == "linux")
         {
-            qApp->networkManager()->hCasterInfo()->UpgradeInfo.UpgradeImageObjectInfo = infoObj;
-            qApp->networkManager()->hCasterInfo()->UpgradeInfo.MajorVersion = jObjRoot["majorVersion"].toInt();
-            qApp->networkManager()->hCasterInfo()->UpgradeInfo.MinorVersion = jObjRoot["minorVersion"].toInt();
+            jObjRoot = jsonObject;
+            break;
+        }
+    }
+
+    if (jObjRoot.isEmpty())
+    {
+        qDebug() << "Error : Could not find object for platform linux.";
+        emit requestCompleted(Status::Failed);
+        return;
+    }
+
+    for (auto infoObj : qApp->hCasterInfo()->ObjectInfoList)
+    {
+        if (jObjRoot["platform"].toString() == "linux" && infoObj.Url.endsWith(jObjRoot["imageName"].toString()))
+        {
+            qApp->hCasterInfo()->UpgradeInfo.UpgradeImageObjectInfo = infoObj;
+            qApp->hCasterInfo()->UpgradeInfo.MajorVersion = jObjRoot["majorVersion"].toInt();
+            qApp->hCasterInfo()->UpgradeInfo.MinorVersion = jObjRoot["minorVersion"].toInt();
             QJsonArray jArrListOfChanges = jObjRoot["listOfChanges"].toArray();
             foreach (const QJsonValue & value, jArrListOfChanges)
-                qApp->networkManager()->hCasterInfo()->UpgradeInfo.ListOfChanges.append(value.toString());
+                qApp->hCasterInfo()->UpgradeInfo.ListOfChanges.append(value.toString());
 
             emit requestCompleted(Status::Success);
             return;

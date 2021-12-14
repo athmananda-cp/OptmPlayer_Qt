@@ -28,6 +28,8 @@ public:
     void setEnhancements(QString enhancements);
 
 signals:
+    void swUpdateAvailable();
+
     void titleChanged();
     void descriptionChanged();
     void enhancementsChanged();

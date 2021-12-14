@@ -45,7 +45,7 @@ ApplicationWindow {
     // This connection will get notification about SW update availability. On this
     // an Update Dialog should be shown which will continue with the work flow.
     Connections {
-        target: swUpdateManager
+        target: swUpdateInfoViewModel
         onSwUpdateAvailable : {
 //            console.log("-------------------> Received the signal upto here ....")
 //            console.log("-----> ", swUpdateInfoViewModel.title)

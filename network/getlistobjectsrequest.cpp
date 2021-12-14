@@ -97,7 +97,7 @@ GetListObjectsRequest::GetListObjectsRequest(QObject *parent)
 
 void GetListObjectsRequest::execute()
 {
-    const QUrl url = QUrl(QString("http://%1:81/jsonrpc").arg(qApp->networkManager()->hCasterInfo()->IpAddress));
+    const QUrl url = QUrl(QString("http://%1:81/jsonrpc").arg(qApp->hCasterInfo()->IpAddress));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -137,6 +137,13 @@ void GetListObjectsRequest::onFinished(QNetworkReply *reply)
 
 void GetListObjectsRequest::handleResponse(QByteArray response)
 {
+    if (response.isEmpty())
+    {
+        qDebug() << "Failed to get object list. Response is empty.";
+        emit requestCompleted(Status::Failed);
+        return;
+    }
+
     QJsonParseError error;
     QJsonDocument document = QJsonDocument::fromJson(response, &error);
     if (error.error != QJsonParseError::NoError)
@@ -166,7 +173,7 @@ void GetListObjectsRequest::handleResponse(QByteArray response)
                 , obj.value("receivedTime").toInt()
                 , obj.value("transferLength").toInt()
             };
-            qApp->networkManager()->hCasterInfo()->ObjectInfoList.append(info);
+            qApp->hCasterInfo()->ObjectInfoList.append(info);
         }
     }
 

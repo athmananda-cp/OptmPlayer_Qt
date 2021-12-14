@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 
 #include "UI/swupdatemanager.h"
+#include "commontypes.h"
 
 #if defined (qApp)
 #undef qApp
@@ -21,8 +22,10 @@ public:
     virtual ~Player() override;
     int exec();
     Q_INVOKABLE void exit();
+
     QQmlApplicationEngine *qmlApplicationEngine();
     QSharedPointer<NetworkManager> networkManager();
+    QSharedPointer<HCasterInfo_t> hCasterInfo() const;
 
 private:
     QScopedPointer<PlayerPrivate> d;

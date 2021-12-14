@@ -40,6 +40,8 @@ uint8_t SwUpdateInstallViewModel::installedPercent()
 
 void SwUpdateInstallViewModel::onSwUpdateInstallationStarted()
 {
+    emit swUpdateInstallationStarted();
+
     m_totalSize = m_dataModel->swUpdateInfo()._BinarySize;
     m_elapsedTimer.start();
 
@@ -68,4 +70,5 @@ void SwUpdateInstallViewModel::onSwUpdateInstallationCompleted()
     emit titleChanged();
     emit remainingStatusChanged();
     emit installedPercentChanged();
+    emit swUpdateInstallationCompleted();
 }

@@ -28,10 +28,14 @@ public slots:
     uint8_t downloadedPercent();
 
     void onBinaryDownloadStarted();
-    void onDownloadProgressChanged(const float downloadedSize);
+    void onDownloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
     void onBinaryDownloadCompleted();
 
 signals:
+    void swUpdatedDownloadStarted();
+    void swUpdateDownloadFailed();
+    void swUpdateDownloadCompleted();
+
     void titleChanged();
     void completionStatusChanged();
     void remainingStatusChanged();

@@ -2,9 +2,13 @@
 #include "commontypes.h"
 #include "network/networkmanager.h"
 #include "network/requests.h"
+#include "utils.h"
 
 #include <QTimer>
 #include <QQmlContext>
+#include <QFile>
+#include <QFileInfo>
+#include <QProcess>
 
 class PlayerPrivate
 {
@@ -13,6 +17,7 @@ public:
     QQmlApplicationEngine                *qmlApplicationEngine {nullptr};
     QSharedPointer<NetworkManager>       nwManager;
     QSharedPointer<SwUpdateManager>      swUpdateManager;
+    QSharedPointer<HCasterInfo_t>        hCasterInfo;
 
     void registerMetaTypes()
     {
@@ -30,6 +35,8 @@ public:
 
     void initializePlayer()
     {
+        hCasterInfo = QSharedPointer<HCasterInfo_t>(new HCasterInfo_t());
+
         swUpdateManager = QSharedPointer<SwUpdateManager>(new SwUpdateManager(q));
         swUpdateManager->registerMetaTypes();
 
@@ -79,4 +86,9 @@ QQmlApplicationEngine *Player::qmlApplicationEngine()
 QSharedPointer<NetworkManager> Player::networkManager()
 {
     return d->nwManager;
+}
+
+QSharedPointer<HCasterInfo_t> Player::hCasterInfo() const
+{
+    return d->hCasterInfo;
 }

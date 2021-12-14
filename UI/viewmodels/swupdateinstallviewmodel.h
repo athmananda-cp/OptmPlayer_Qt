@@ -34,6 +34,10 @@ signals:
     void remainingStatusChanged();
     void installedPercentChanged();
 
+    void swUpdateInstallationStarted();
+    void swUpdateInstallationFailed();
+    void swUpdateInstallationCompleted();
+
 private:
     QSharedPointer<SwUpdateDataModel> m_dataModel;
     float               m_totalSize;

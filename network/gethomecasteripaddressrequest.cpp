@@ -45,6 +45,12 @@ void GetHomeCasterIpAddressRequest::onFinished(QNetworkReply *reply)
 void GetHomeCasterIpAddressRequest::handleResponse(QByteArray response)
 {
     qDebug() << "GetHomeCasterIpAddressRequest response : " << response;
+    if (response.isEmpty())
+    {
+        qDebug() << "Failed to get HC IP. Response is empty.";
+        emit requestCompleted(Status::Failed);
+        return;
+    }
 
     QJsonParseError error;
     QJsonDocument document = QJsonDocument::fromJson(response, &error);
@@ -64,7 +70,7 @@ void GetHomeCasterIpAddressRequest::handleResponse(QByteArray response)
     QJsonArray ipArray = document.array();
     QVariantList ipList = ipArray.toVariantList();
     QVariantMap ipMap = ipList.at(0).toMap();
-    qApp->networkManager()->hCasterInfo()->IpAddress = ipMap["client_addr"].toString();
+    qApp->hCasterInfo()->IpAddress = ipMap["client_addr"].toString();
 
     emit requestCompleted(Status::Success);
 }

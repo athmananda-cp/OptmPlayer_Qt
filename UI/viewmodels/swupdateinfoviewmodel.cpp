@@ -7,6 +7,18 @@ SwUpdateInfoViewModel::SwUpdateInfoViewModel(QSharedPointer<SwUpdateDataModel> d
     : QObject(parent)
     , m_dataModel(dataModel)
 {
+    // Handle sw update check signals
+    connect(m_dataModel.data(), &SwUpdateDataModel::checkForSwUpdateStarted, this, [=]() {
+        // NO OP
+    });
+    connect(m_dataModel.data(), &SwUpdateDataModel::swUpdateAvaialble, this, [=](const SwUpdateInfo_t &swUpdateInfo) {
+        setSwUpdateInfo(swUpdateInfo);
+        emit swUpdateAvailable(); // Caught in QML to show the update dialog
+    });
+    connect(m_dataModel.data(), &SwUpdateDataModel::checkForSwUpdateCompleted, this, [=](bool status, QString message) {
+        Q_UNUSED(status);
+        Q_UNUSED(message);
+    });
 }
 
 SwUpdateInfoViewModel::~SwUpdateInfoViewModel()

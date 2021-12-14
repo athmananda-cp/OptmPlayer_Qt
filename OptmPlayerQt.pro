@@ -13,9 +13,9 @@ SOURCES += \
         UI/viewmodels/swupdateinfoviewmodel.cpp \
         UI/viewmodels/swupdateinstallviewmodel.cpp \
         commontypes.cpp \
-        deviceconnect.cpp \
         main.cpp \
         UI/models/swupdatedatamodel.cpp \
+        network/getbinaryimagerequest.cpp \
         network/gethomecasteripaddressrequest.cpp \
         network/getlistobjectsrequest.cpp \
         network/getupgradejsonrequest.cpp \
@@ -31,7 +31,6 @@ HEADERS += \
     UI/viewmodels/swupdateinfoviewmodel.h \
     UI/viewmodels/swupdateinstallviewmodel.h \
     commontypes.h \
-    deviceconnect.h \
     UI/models/swupdatedatamodel.h \
     network/networkmanager.h \
     network/requests.h \

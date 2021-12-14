@@ -31,10 +31,14 @@ Item {
     ]
 
     Connections {
-        target: swUpdateManager
+        target: swUpdateDownloadViewModel
         onSwUpdatedDownloadStarted       : {state = "DownloadingUpdate"}
         onSwUpdateDownloadFailed         : {}
         onSwUpdateDownloadCompleted      : {}
+    }
+
+    Connections {
+        target: swUpdateInstallViewModel
         onSwUpdateInstallationStarted    : {state = "InstallingUpdate"}
         onSwUpdateInstallationFailed     : {}
         onSwUpdateInstallationCompleted  : {

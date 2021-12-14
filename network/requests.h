@@ -28,6 +28,7 @@ protected slots:
 
 signals:
     void requestCompleted(Status);
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 protected:
     QNetworkAccessManager *m_nwAccessManager;
@@ -63,6 +64,18 @@ class GetUpgradeJsonRequest : public IRequest
 public:
     explicit GetUpgradeJsonRequest(QObject * parent = nullptr);
     virtual ~GetUpgradeJsonRequest() = default;
+    void execute() override;
+    void onFinished(QNetworkReply *reply) override;
+
+private:
+    void handleResponse(QByteArray response);
+};
+
+class GetBinaryImageRequest : public IRequest
+{
+public:
+    explicit GetBinaryImageRequest(QObject * parent = nullptr);
+    virtual ~GetBinaryImageRequest() = default;
     void execute() override;
     void onFinished(QNetworkReply *reply) override;
 
