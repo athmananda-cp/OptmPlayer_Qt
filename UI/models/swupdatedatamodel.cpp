@@ -34,7 +34,7 @@ void SwUpdateDataModel::checkForSwUpdate()
             SwUpdateInfo_t swUpdateInfo;
             swUpdateInfo._VersionInfo._MajorNumber = qApp->hCasterInfo()->UpgradeInfo.MajorVersion;
             swUpdateInfo._VersionInfo._MinorNumber = qApp->hCasterInfo()->UpgradeInfo.MinorVersion;
-            swUpdateInfo._VersionInfo._MaintenanceNumber = 0;
+            swUpdateInfo._VersionInfo._MaintenanceNumber = qApp->hCasterInfo()->UpgradeInfo.VersionNumber;
             swUpdateInfo._Enhancements = qApp->hCasterInfo()->UpgradeInfo.ListOfChanges.join("");
 
             m_swUpdateInfo = swUpdateInfo;

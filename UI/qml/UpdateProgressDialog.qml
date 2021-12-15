@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 
 Item {
     id:updateProgressDialog
-    width: 1000
+    width: 500
     height: 250
     anchors.centerIn: parent
 
@@ -64,12 +64,11 @@ Item {
             id: title
             x: 20
             y: 19
-            width: 961
+            width: 450
             height: 44
             color: "#fdfbfb"
             font.pixelSize: 25
             font.bold: true
-            text: titleText
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -77,10 +76,9 @@ Item {
         Text {
             x: 61
             y: 81
-            width: 515
+            width: 500
             height: 44
             color: "#fdfbfb"
-            text: completText
             font.pixelSize: 20
         }
 
@@ -89,7 +87,7 @@ Item {
             value: progress / 100
             x: 61
             y: 124
-            width: 879
+            width: 400
             height: 30
 
             background: Rectangle {
@@ -100,6 +98,7 @@ Item {
             }
 
             contentItem: Item {
+                width: 300
                 implicitWidth: 200
                 implicitHeight: 4
 
@@ -115,7 +114,7 @@ Item {
         Text {
             x: 425
             y: 198
-            width: 515
+            width: 500
             height: 44
             color: "#fdfbfb"
             text: remainingText
@@ -130,3 +129,12 @@ Designer {
     D{i:0;formeditorZoom:1.1}
 }
 ##^##*/
+
+
+
+
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

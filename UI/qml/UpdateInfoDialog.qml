@@ -2,8 +2,8 @@ import QtQuick 2.4
 
 Item {
     id:updateInfoDialog
-    width: 600
-    height: 500
+    width: 480
+    height: 320
     anchors.centerIn: parent
 
     property string listOfChanges: ""
@@ -31,9 +31,9 @@ Item {
 
         Text {
             x: 20
-            y: 80
+            y: 60
             width: parent.width - 40
-            height: 44
+            height: 40
             color: "#fdfbfb"
             text: qsTr("List of changes")
             font.pixelSize: 20
@@ -44,10 +44,10 @@ Item {
 
         Text {
             id:changesText
-            x: 25
-            y: 130
-            width: 550
-            height: 289
+            x: 20
+            y: 106
+            width: 440
+            height: 150
             color: "#fdfbfb"
             text: listOfChanges
             font.pixelSize: 20
@@ -55,10 +55,11 @@ Item {
 
         PlayerButton {
             id: cancelButton
-            x: 41
-            y: 436
-            width: 250
+            x: 149
+            y: 260
+            width: 150
             height: 50
+            radius: 1
             buttonText: "Do it later"
 
             onButtonClicked: {
@@ -69,9 +70,10 @@ Item {
         PlayerButton {
             id: openButton
             x: 310
-            y: 436
-            width: 250
+            y: 260
+            width: 150
             height: 50
+            radius: 1
             buttonText: "Update now"
             onButtonClicked: {
                 updateInfoDialog.visible = false

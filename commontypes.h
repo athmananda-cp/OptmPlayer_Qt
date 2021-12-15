@@ -27,6 +27,7 @@ typedef struct upgradeInfo
 {
     int                 MajorVersion;
     int                 MinorVersion;
+    int                 VersionNumber;
     QStringList         ListOfChanges;
     ObjectInfo_t        UpgradeImageObjectInfo;
 } UpgradeInfo_t;

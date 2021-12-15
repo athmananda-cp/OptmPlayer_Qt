@@ -14,13 +14,13 @@ Rectangle {
 
     TextField {
         id: textField
-        color: "#fdfbfb"
+       // color: "#fdfbfb"
         placeholderText: textFiled.placeholderText
         font.pixelSize: 20
         width: parent.width - 10
         height: parent.height - 10
         anchors.centerIn: parent
         clip: true
-        background: Item { opacity: 0 }
+//        background: Item { opacity: 0 }
     }
 }

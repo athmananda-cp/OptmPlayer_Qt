@@ -121,14 +121,22 @@ void GetUpgradeJsonRequest::handleResponse(QByteArray response)
         if (jObjRoot["platform"].toString() == "linux" && infoObj.Url.endsWith(jObjRoot["imageName"].toString()))
         {
             qApp->hCasterInfo()->UpgradeInfo.UpgradeImageObjectInfo = infoObj;
-            qApp->hCasterInfo()->UpgradeInfo.MajorVersion = jObjRoot["majorVersion"].toInt();
-            qApp->hCasterInfo()->UpgradeInfo.MinorVersion = jObjRoot["minorVersion"].toInt();
-            QJsonArray jArrListOfChanges = jObjRoot["listOfChanges"].toArray();
-            foreach (const QJsonValue & value, jArrListOfChanges)
-                qApp->hCasterInfo()->UpgradeInfo.ListOfChanges.append(value.toString());
+            QString strVersionInfo = jObjRoot["Version"].toString();
+            QStringList versionNumbers = strVersionInfo.split(".");
+        qDebug() << "versionNumbers.length() " <<  versionNumbers.length() << strVersionInfo;
+            if (versionNumbers.length() >= 3)
+            {
+                qApp->hCasterInfo()->UpgradeInfo.MajorVersion        = versionNumbers[0].toInt();
+                qApp->hCasterInfo()->UpgradeInfo.MinorVersion       = versionNumbers[1].toInt();
+                qApp->hCasterInfo()->UpgradeInfo.VersionNumber  = versionNumbers[2].toInt();
 
-            emit requestCompleted(Status::Success);
-            return;
+                QJsonArray jArrListOfChanges = jObjRoot["listOfChanges"].toArray();
+                foreach (const QJsonValue & value, jArrListOfChanges)
+                    qApp->hCasterInfo()->UpgradeInfo.ListOfChanges.append(value.toString());
+
+                emit requestCompleted(Status::Success);
+                return;
+            }
         }
     }
 

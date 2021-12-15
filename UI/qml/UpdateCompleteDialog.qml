@@ -2,7 +2,7 @@ import QtQuick 2.4
 
 Item {
     id:updateCompleteDialog
-    width: 600
+    width: 480
     height: 200
     anchors.centerIn: parent
 
@@ -31,10 +31,12 @@ Item {
         }
 
         PlayerButton {
-            x: 38
+            x: 30
             y: 122
-            width: 250
+            width: 200
             height: 50
+            radius: 6
+            border.width: 6
             buttonText: "Reboot Later"
 
             onButtonClicked: {
@@ -43,10 +45,11 @@ Item {
         }
 
         PlayerButton {
-            x: 307
+            x: 265
             y: 122
-            width: 250
+            width: 200
             height: 50
+            border.width: 6
             buttonText: "Reboot Now"
             onButtonClicked: {
                 updateCompleteDialog.visible = false
@@ -54,4 +57,9 @@ Item {
             }
         }
     }
+    states: [
+        State {
+            name: "State1"
+        }
+    ]
 }

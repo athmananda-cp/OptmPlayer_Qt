@@ -2,8 +2,8 @@ import QtQuick 2.4
 
 Item {
     id:updateDialog
-    width: 1000
-    height: 250
+    width: 640
+    height: 240
     anchors.centerIn: parent
 
     Rectangle {

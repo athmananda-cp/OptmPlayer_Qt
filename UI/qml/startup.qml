@@ -5,24 +5,25 @@ import QtGraphicalEffects 1.0
 
 ApplicationWindow {
     id: rootWindow
-    width: Screen.width
-    height: Screen.height
+    width: 720
+    height: 560
     visible: true
-    visibility: Window.FullScreen
+    visibility: Window.Minimized
     color: "#86c4eb"
+    title: "OptmPlayer"
 
     Rectangle {
         id: videoScreen
-        width: rootWindow.width
-        height: rootWindow.height - 80
+        width: 720
+        height: 480
         opacity: 0.3
     }
 
     Rectangle {
-        width: rootWindow.width
+        width: 720
         height: 80
         color: "black"
-        opacity: 0.5
+        opacity: 1
         anchors.top: videoScreen.bottom
     }
 
