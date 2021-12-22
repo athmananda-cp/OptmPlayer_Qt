@@ -1,4 +1,4 @@
-QT += quick network
+QT += quick network multimedia 
 
 CONFIG += c++11
 
@@ -49,6 +49,9 @@ QML_IMPORT_PATH =
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
+
+LIBS       += -L/usr/local/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
+INCLUDEPATH += /usr/local/lib/include
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

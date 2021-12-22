@@ -3,7 +3,7 @@
 #include "network/networkmanager.h"
 #include "network/requests.h"
 #include "utils.h"
-
+#include <QtQuick/QQuickView>
 #include <QTimer>
 #include <QQmlContext>
 #include <QFile>

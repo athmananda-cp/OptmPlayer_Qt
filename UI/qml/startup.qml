@@ -2,6 +2,8 @@ import QtQuick 2.2
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
+import VLCQt 1.0
+import QtMultimedia 5.0
 
 ApplicationWindow {
     id: rootWindow
@@ -13,10 +15,18 @@ ApplicationWindow {
     title: "OptmPlayer"
 
     Rectangle {
-        id: videoScreen
+        id: vidwidget
         width: 720
         height: 480
-        opacity: 0.3
+        color: "skyblue"
+        visible: true
+        opacity: 100
+
+        VlcVideoPlayer {
+            anchors.fill: parent
+//            url: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+            url: "http://192.168.1.4/hls/56-5003/index.m3u8"
+        }
     }
 
     Rectangle {
@@ -24,7 +34,7 @@ ApplicationWindow {
         height: 80
         color: "black"
         opacity: 1
-        anchors.top: videoScreen.bottom
+        anchors.top: vidwidget.bottom
     }
 
     // ----------------------------------------------------------------------------
@@ -59,3 +69,8 @@ ApplicationWindow {
     }
     // ----------------------------------------------------------------------------
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/
