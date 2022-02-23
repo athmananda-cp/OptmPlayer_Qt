@@ -1,30 +1,30 @@
-#include "swupdatedownloadviewmodel.h"
+#include "player_ui_view_fwdownload.h"
 
 #include <QDebug>
 
-SwUpdateDownloadViewModel::SwUpdateDownloadViewModel(QSharedPointer<SwUpdateDataModel> dataModel, QObject *parent)
+PlayerUiViewFwDownload::PlayerUiViewFwDownload(QSharedPointer<PlayerUiData> dataModel, QObject *parent)
     : QObject(parent)
     , m_dataModel(dataModel)
     , m_totalSize(0)
     , m_downloadedSize(0)
     , m_downloadedPercentage(0)
 {
-    connect(m_dataModel.data(), &SwUpdateDataModel::binaryDownloadStarted, this, &SwUpdateDownloadViewModel::onBinaryDownloadStarted);
-    connect(m_dataModel.data(), &SwUpdateDataModel::downloadProgressChanged, this, &SwUpdateDownloadViewModel::onDownloadProgressChanged);
-    connect(m_dataModel.data(), &SwUpdateDataModel::binaryDownloadCompleted, this, &SwUpdateDownloadViewModel::onBinaryDownloadCompleted);
+    connect(m_dataModel.data(), &PlayerUiData::binaryDownloadStarted, this, &PlayerUiViewFwDownload::onBinaryDownloadStarted);
+    connect(m_dataModel.data(), &PlayerUiData::downloadProgressChanged, this, &PlayerUiViewFwDownload::onDownloadProgressChanged);
+    connect(m_dataModel.data(), &PlayerUiData::binaryDownloadCompleted, this, &PlayerUiViewFwDownload::onBinaryDownloadCompleted);
 }
 
-SwUpdateDownloadViewModel::~SwUpdateDownloadViewModel()
+PlayerUiViewFwDownload::~PlayerUiViewFwDownload()
 {
 }
 
-QString SwUpdateDownloadViewModel::title()
+QString PlayerUiViewFwDownload::title()
 {
     QString title = QString("DOWNLOAD IN PROGRESS - %1%").arg((int)m_downloadedPercentage);
     return title;
 }
 
-QString SwUpdateDownloadViewModel::completionStatus()
+QString PlayerUiViewFwDownload::completionStatus()
 {
     int elapsedTimeInSec = m_elapsedTimer.elapsed() / 1000;
     QString status = QString("Completed %1 Mb (%2 MB/s)")
@@ -33,7 +33,7 @@ QString SwUpdateDownloadViewModel::completionStatus()
     return status;
 }
 
-QString SwUpdateDownloadViewModel::remainingStatus()
+QString PlayerUiViewFwDownload::remainingStatus()
 {
     int elapsedTimeInSec = m_elapsedTimer.elapsed() / 1000;
     int mbPerSec = elapsedTimeInSec == 0 ? 0 : m_downloadedSize / elapsedTimeInSec;
@@ -44,12 +44,12 @@ QString SwUpdateDownloadViewModel::remainingStatus()
     return status;
 }
 
-uint8_t SwUpdateDownloadViewModel::downloadedPercent()
+uint8_t PlayerUiViewFwDownload::downloadedPercent()
 {
     return m_downloadedPercentage;
 }
 
-void SwUpdateDownloadViewModel::onBinaryDownloadStarted()
+void PlayerUiViewFwDownload::onBinaryDownloadStarted()
 {
     emit swUpdatedDownloadStarted();
 
@@ -62,7 +62,7 @@ void SwUpdateDownloadViewModel::onBinaryDownloadStarted()
     emit remainingStatusChanged();
 }
 
-void SwUpdateDownloadViewModel::onDownloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal)
+void PlayerUiViewFwDownload::onDownloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal)
 {
     if (bytesReceived == 0 || bytesTotal == 0)
         return;
@@ -76,7 +76,7 @@ void SwUpdateDownloadViewModel::onDownloadProgressChanged(qint64 bytesReceived, 
     emit remainingStatusChanged();
 }
 
-void SwUpdateDownloadViewModel::onBinaryDownloadCompleted()
+void PlayerUiViewFwDownload::onBinaryDownloadCompleted()
 {
     m_downloadedSize = m_totalSize;
     m_downloadedPercentage = 100;

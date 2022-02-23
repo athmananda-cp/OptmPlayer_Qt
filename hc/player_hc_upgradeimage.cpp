@@ -1,26 +1,26 @@
-#include "requests.h"
+#include "network/player_network_requests.h"
 #include "player.h"
-#include "network/networkmanager.h"
+#include "network/player_network_manager.h"
 
 #include <QFile>
 #include <QDataStream>
 
-GetBinaryImageRequest::GetBinaryImageRequest(QObject *parent)
-    : IRequest(parent)
+PlayerHcGetUpgradeImage::PlayerHcGetUpgradeImage(QObject *parent)
+    : IPlayerNetworkRequest(parent)
 {
 }
 
-void GetBinaryImageRequest::execute()
+void PlayerHcGetUpgradeImage::execute()
 {
     UpgradeInfo_t upgradeInfoObject = qApp->hCasterInfo()->UpgradeInfo;
     QNetworkRequest request(QUrl(upgradeInfoObject.UpgradeImageObjectInfo.Url));
 
     qDebug() << "Downloading binary : " << upgradeInfoObject.UpgradeImageObjectInfo.Url;
     QNetworkReply *reply = m_nwAccessManager->get(request);
-    connect(reply, &QNetworkReply::downloadProgress, this, &GetBinaryImageRequest::downloadProgress);
+    connect(reply, &QNetworkReply::downloadProgress, this, &PlayerHcGetUpgradeImage::downloadProgress);
 }
 
-void GetBinaryImageRequest::onFinished(QNetworkReply *reply)
+void PlayerHcGetUpgradeImage::onFinished(QNetworkReply *reply)
 {
     QUrl url = reply->url();
     if (reply->error())
@@ -40,9 +40,9 @@ void GetBinaryImageRequest::onFinished(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void GetBinaryImageRequest::handleResponse(QByteArray response)
+void PlayerHcGetUpgradeImage::handleResponse(QByteArray response)
 {
-    qDebug() << "GetBinaryImageRequest::handleResponse";
+    qDebug() << "PlayerHcGetUpgradeImage::handleResponse";
     if (response.isEmpty())
     {
         qDebug() << "Failed to get binary image. Response is empty.";
@@ -52,7 +52,7 @@ void GetBinaryImageRequest::handleResponse(QByteArray response)
 
     UpgradeInfo_t upgradeInfoObject = qApp->hCasterInfo()->UpgradeInfo;
     QUrl url(upgradeInfoObject.UpgradeImageObjectInfo.Url);
-    QFile file("/tmp/" + url.fileName());
+    QFile file("/home/savi/project/" + url.fileName());
     file.open(QIODevice::WriteOnly);
     file.write(response);
     file.flush();

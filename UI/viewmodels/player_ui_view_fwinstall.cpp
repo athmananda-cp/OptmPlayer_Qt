@@ -1,29 +1,29 @@
-#include "swupdateinstallviewmodel.h"
+#include "player_ui_view_fwinstall.h"
 
-SwUpdateInstallViewModel::SwUpdateInstallViewModel(QSharedPointer<SwUpdateDataModel> dataModel, QObject *parent)
+PlayerUiViewFwInstall::PlayerUiViewFwInstall(QSharedPointer<PlayerUiData> dataModel, QObject *parent)
     : QObject(parent)
     , m_dataModel(dataModel)
     , m_totalSize(0)
     , m_installedSize(0)
     , m_installedPercentage(0)
 {
-    connect(m_dataModel.data(), &SwUpdateDataModel::swUpdateInstallationStarted, this, &SwUpdateInstallViewModel::onSwUpdateInstallationStarted);
-    connect(m_dataModel.data(), &SwUpdateDataModel::swUpdateInstallationProgressChanged, this, &SwUpdateInstallViewModel::onSwUpdateInstallationProgressChanged);
-    connect(m_dataModel.data(), &SwUpdateDataModel::swUpdateInstallationCompleted, this, &SwUpdateInstallViewModel::onSwUpdateInstallationCompleted);
+    connect(m_dataModel.data(), &PlayerUiData::swUpdateInstallationStarted, this, &PlayerUiViewFwInstall::onSwUpdateInstallationStarted);
+    connect(m_dataModel.data(), &PlayerUiData::swUpdateInstallationProgressChanged, this, &PlayerUiViewFwInstall::onSwUpdateInstallationProgressChanged);
+    connect(m_dataModel.data(), &PlayerUiData::swUpdateInstallationCompleted, this, &PlayerUiViewFwInstall::onSwUpdateInstallationCompleted);
 }
 
-SwUpdateInstallViewModel::~SwUpdateInstallViewModel()
+PlayerUiViewFwInstall::~PlayerUiViewFwInstall()
 {
 
 }
 
-QString SwUpdateInstallViewModel::title()
+QString PlayerUiViewFwInstall::title()
 {
     QString title = QString("INSTALATION IN PROGRESS - %1%").arg((int)m_installedPercentage);
     return title;
 }
 
-QString SwUpdateInstallViewModel::remainingStatus()
+QString PlayerUiViewFwInstall::remainingStatus()
 {
     int elapsedTimeInSec = m_elapsedTimer.elapsed() / 1000;
     int mbPerSec = elapsedTimeInSec == 0 ? 0 : m_installedSize / elapsedTimeInSec;
@@ -33,12 +33,12 @@ QString SwUpdateInstallViewModel::remainingStatus()
     return status;
 }
 
-uint8_t SwUpdateInstallViewModel::installedPercent()
+uint8_t PlayerUiViewFwInstall::installedPercent()
 {
     return m_installedPercentage;
 }
 
-void SwUpdateInstallViewModel::onSwUpdateInstallationStarted()
+void PlayerUiViewFwInstall::onSwUpdateInstallationStarted()
 {
     emit swUpdateInstallationStarted();
 
@@ -49,7 +49,7 @@ void SwUpdateInstallViewModel::onSwUpdateInstallationStarted()
     emit remainingStatusChanged();
 }
 
-void SwUpdateInstallViewModel::onSwUpdateInstallationProgressChanged(const float installedSize)
+void PlayerUiViewFwInstall::onSwUpdateInstallationProgressChanged(const float installedSize)
 {
     if (installedSize == 0)
         return;
@@ -62,7 +62,7 @@ void SwUpdateInstallViewModel::onSwUpdateInstallationProgressChanged(const float
     emit installedPercentChanged();
 }
 
-void SwUpdateInstallViewModel::onSwUpdateInstallationCompleted()
+void PlayerUiViewFwInstall::onSwUpdateInstallationCompleted()
 {
     m_installedSize = m_totalSize;
     m_installedPercentage = 100;

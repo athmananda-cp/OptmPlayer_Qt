@@ -53,7 +53,7 @@ Item {
             buttonText: "Reboot Now"
             onButtonClicked: {
                 updateCompleteDialog.visible = false
-                player.exit()
+                player.launchNewExe();
             }
         }
     }

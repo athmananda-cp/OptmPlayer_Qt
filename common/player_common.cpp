@@ -1,4 +1,4 @@
-#include "commontypes.h"
+#include "common/player_common.h"
 
 bool versionInfo::equals(const versionInfo vInfo)
 {

@@ -1,5 +1,5 @@
-#ifndef COMMONTYPES_H
-#define COMMONTYPES_H
+#ifndef PLAYER_COMMON_H
+#define PLAYER_COMMON_H
 
 #include <cstdint>
 #include <QString>
@@ -35,6 +35,7 @@ typedef struct upgradeInfo
 typedef struct hcasterInfo
 {
     QString             IpAddress;
+    QString             PlaybackUrl;
     QList<ObjectInfo_t> ObjectInfoList;
     UpgradeInfo_t       UpgradeInfo;
 } HCasterInfo_t;
@@ -72,6 +73,17 @@ public:
     QString           _Enhancements;
     float             _BinarySize;
 } SwUpdateInfo_t;
+
+
+typedef struct ErrorDetails
+{
+    Q_GADGET
+    Q_PROPERTY(QString ErrorInfo MEMBER _ErrorInfo)
+
+public:
+    QString           _ErrorInfo;
+} errorInfo_t;
+
 Q_DECLARE_METATYPE(SwUpdateInfo_t);
 
-#endif // COMMONTYPES_H
+#endif // PLAYER_COMMON_H

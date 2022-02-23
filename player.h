@@ -4,15 +4,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "UI/swupdatemanager.h"
-#include "commontypes.h"
+#include "UI/player_ui_manager.h"
+#include "common/player_common.h"
 
 #if defined (qApp)
 #undef qApp
 #endif
 #define qApp (static_cast<Player*>(QGuiApplication::instance()))
 
-class NetworkManager;
+class PlayerNetworkManager;
 class PlayerPrivate;
 class Player : public QGuiApplication
 {
@@ -22,9 +22,10 @@ public:
     virtual ~Player() override;
     int exec();
     Q_INVOKABLE void exit();
+    Q_INVOKABLE void launchNewExe();
 
     QQmlApplicationEngine *qmlApplicationEngine();
-    QSharedPointer<NetworkManager> networkManager();
+    QSharedPointer<PlayerNetworkManager> networkManager();
     QSharedPointer<HCasterInfo_t> hCasterInfo() const;
 
 private:

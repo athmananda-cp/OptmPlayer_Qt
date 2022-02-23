@@ -15,11 +15,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QCoreApplication::setApplicationName("OptmPlayer");
+    QCoreApplication::setApplicationName("OptmPlayerQt");
     QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
 
-//    QGuiApplication app(argc, argv);
-//    VlcCommon::setPluginPath(app.applicationDirPath() + "/plugins");
     VlcQmlVideoPlayer::registerPlugin();
 
     Player(argc,argv).exec();

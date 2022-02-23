@@ -9,39 +9,40 @@ CONFIG += c++11
 #DEFINES += DUMMY_SERVER_DATA
 
 SOURCES += \
-        UI/viewmodels/swupdatedownloadviewmodel.cpp \
-        UI/viewmodels/swupdateinfoviewmodel.cpp \
-        UI/viewmodels/swupdateinstallviewmodel.cpp \
-        commontypes.cpp \
+        UI/viewmodels/player_ui_view_fwdownload.cpp \
+        UI/viewmodels/player_ui_view_fwinfo.cpp \
+        UI/viewmodels/player_ui_view_fwinstall.cpp \
+        common/player_common.cpp \
         main.cpp \
-        UI/models/swupdatedatamodel.cpp \
-        network/getbinaryimagerequest.cpp \
-        network/gethomecasteripaddressrequest.cpp \
-        network/getlistobjectsrequest.cpp \
-        network/getupgradejsonrequest.cpp \
-        network/networkmanager.cpp \
-        network/requests.cpp \
-        network/responses.cpp \
+        UI/player_ui_data.cpp \
+        hc/player_hc_upgradeimage.cpp \
+        hc/player_hc_params.cpp \
+        hc/player_hc_objectslist.cpp \
+	hc/player_hc_servicelist.cpp \
+        hc/player_hc_upgradejson.cpp \
+        network/player_network_manager.cpp \
+        network/player_network_requests.cpp \
+        network/player_network_responses.cpp \
         player.cpp \
-        UI/swupdatemanager.cpp \
-        utils.cpp
+        UI/player_ui_manager.cpp \
+        common/player_utils.cpp
 
 HEADERS += \
-    UI/viewmodels/swupdatedownloadviewmodel.h \
-    UI/viewmodels/swupdateinfoviewmodel.h \
-    UI/viewmodels/swupdateinstallviewmodel.h \
-    commontypes.h \
-    UI/models/swupdatedatamodel.h \
-    network/networkmanager.h \
-    network/requests.h \
-    network/responses.h \
+    UI/viewmodels/player_ui_view_fwdownload.h \
+    UI/viewmodels/player_ui_view_fwinfo.h \
+    UI/viewmodels/player_ui_view_fwinstall.h \
+    common/player_common.h \
+    UI/player_ui_data.h \
+    network/player_network_manager.h \
+    network/player_network_requests.h \
+    network/player_network_responses.h \
     player.h \
-    UI/swupdatemanager.h \
-    utils.h
+    UI/player_ui_manager.h \
+    common/player_utils.h
 
 DISTFILES += \
     config/versioninfo.ini
-
+    scripts/installrun.sh
 RESOURCES += UI/qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -58,3 +59,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+#TEMPLATE = lib
+#CONFIG += staticlib

@@ -1,14 +1,14 @@
-#ifndef SWUPDATEDOWNLOADVIEWMODEL_H
-#define SWUPDATEDOWNLOADVIEWMODEL_H
+#ifndef PLAYER_UI_VIEW_FWDOWNLOAD_H
+#define PLAYER_UI_VIEW_FWDOWNLOAD_H
 
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
 #include <QElapsedTimer>
 
-#include "UI/models/swupdatedatamodel.h"
+#include "UI/player_ui_data.h"
 
-class SwUpdateDownloadViewModel : public QObject
+class PlayerUiViewFwDownload : public QObject
 {
     Q_OBJECT
 
@@ -18,8 +18,8 @@ class SwUpdateDownloadViewModel : public QObject
     Q_PROPERTY(float downloadedPercent READ downloadedPercent NOTIFY downloadedPercentChanged)
 
 public:
-    explicit SwUpdateDownloadViewModel(QSharedPointer<SwUpdateDataModel> dataModel, QObject *parent = nullptr);
-    virtual ~SwUpdateDownloadViewModel();
+    explicit PlayerUiViewFwDownload(QSharedPointer<PlayerUiData> dataModel, QObject *parent = nullptr);
+    virtual ~PlayerUiViewFwDownload();
 
 public slots:
     QString title();
@@ -42,11 +42,11 @@ signals:
     void downloadedPercentChanged();
 
 private:
-    QSharedPointer<SwUpdateDataModel> m_dataModel;
+    QSharedPointer<PlayerUiData> m_dataModel;
     float               m_totalSize;
     float               m_downloadedSize;
     float               m_downloadedPercentage;
     QElapsedTimer       m_elapsedTimer;
 };
 
-#endif // SWUPDATEDOWNLOADVIEWMODEL_H
+#endif // PLAYER_UI_VIEW_FWDOWNLOAD_H

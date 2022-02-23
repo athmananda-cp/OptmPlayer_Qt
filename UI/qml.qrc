@@ -7,6 +7,7 @@
         <file>qml/UpdatePathDialog.qml</file>
         <file>qml/UpdateProgressDialog.qml</file>
         <file>qml/UpdateCompleteDialog.qml</file>
+        <file>qml/UpdateErrorDialog.qml</file>		
     </qresource>
     <qresource prefix="/images">
         <file>images/rectangle.svg</file>

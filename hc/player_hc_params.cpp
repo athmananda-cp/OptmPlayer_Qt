@@ -1,6 +1,6 @@
-#include "requests.h"
+#include "network/player_network_requests.h"
 #include "player.h"
-#include "network/networkmanager.h"
+#include "network/player_network_manager.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -8,19 +8,20 @@
 #include <QJsonParseError>
 #include <QMap>
 
-GetHomeCasterIpAddressRequest::GetHomeCasterIpAddressRequest(QObject *parent)
-    : IRequest(parent)
+PlayerHcGetParams::PlayerHcGetParams(QObject *parent)
+    : IPlayerNetworkRequest(parent)
 {
 }
 
-void GetHomeCasterIpAddressRequest::execute()
+void PlayerHcGetParams::execute()
 {
-    qDebug() << "Sending request for hcast ip";
+//    qDebug() << "Sending request for hcast ip";
     QNetworkRequest request(QUrl("http://hcaster.digicaps.com/get_ip.php"));
+    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork);
     m_nwAccessManager->get(request);
 }
 
-void GetHomeCasterIpAddressRequest::onFinished(QNetworkReply *reply)
+void PlayerHcGetParams::onFinished(QNetworkReply *reply)
 {
     QUrl url = reply->url();
     if (reply->error())
@@ -31,21 +32,16 @@ void GetHomeCasterIpAddressRequest::onFinished(QNetworkReply *reply)
         return;
     }
 
-    // Process reply
-#ifdef DUMMY_SERVER_DATA
-    QByteArray data = QString("[{\"client_addr\":\"192.168.0.108\"}]").toUtf8();
-    handleResponse(data);
-#else
     QByteArray data = reply->readAll();
     handleResponse(data);
-#endif
+
     reply->deleteLater();
 }
 
-void GetHomeCasterIpAddressRequest::handleResponse(QByteArray response)
+void PlayerHcGetParams::handleResponse(QByteArray response)
 {
-    IRequest::Status retvalue = Status::Failed;
-    qDebug() << "GetHomeCasterIpAddressRequest response : " << response;
+    IPlayerNetworkRequest::Status retvalue = Status::Failed;
+  //  qDebug() << "PlayerHcGetParams response : " << response;
     if (!response.isEmpty())
     {   
         QJsonParseError error;

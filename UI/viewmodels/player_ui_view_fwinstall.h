@@ -1,14 +1,14 @@
-#ifndef SWUPDATEINSTALLVIEWMODEL_H
-#define SWUPDATEINSTALLVIEWMODEL_H
+#ifndef PLAYER_UI_VIEW_FWINSTALL_H
+#define PLAYER_UI_VIEW_FWINSTALL_H
 
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
 #include <QElapsedTimer>
 
-#include "UI/models/swupdatedatamodel.h"
+#include "UI/player_ui_data.h"
 
-class SwUpdateInstallViewModel : public QObject
+class PlayerUiViewFwInstall : public QObject
 {
     Q_OBJECT
 
@@ -17,8 +17,8 @@ class SwUpdateInstallViewModel : public QObject
     Q_PROPERTY(float installedPercent READ installedPercent NOTIFY installedPercentChanged)
 
 public:
-    explicit SwUpdateInstallViewModel(QSharedPointer<SwUpdateDataModel> dataModel, QObject *parent = nullptr);
-    virtual ~SwUpdateInstallViewModel();
+    explicit PlayerUiViewFwInstall(QSharedPointer<PlayerUiData> dataModel, QObject *parent = nullptr);
+    virtual ~PlayerUiViewFwInstall();
 
 public slots:
     QString title();
@@ -39,11 +39,11 @@ signals:
     void swUpdateInstallationCompleted();
 
 private:
-    QSharedPointer<SwUpdateDataModel> m_dataModel;
+    QSharedPointer<PlayerUiData> m_dataModel;
     float               m_totalSize;
     float               m_installedSize;
     float               m_installedPercentage;
     QElapsedTimer       m_elapsedTimer;
 };
 
-#endif // SWUPDATEINSTALLVIEWMODEL_H
+#endif // PLAYER_UI_VIEW_FWINSTALL_H

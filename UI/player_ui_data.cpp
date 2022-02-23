@@ -1,35 +1,35 @@
-#include "swupdatedatamodel.h"
-#include "network/networkmanager.h"
-#include "network/requests.h"
+#include "UI/player_ui_data.h"
+#include "network/player_network_manager.h"
+#include "network/player_network_requests.h"
 #include "player.h"
-#include "utils.h"
+#include "common/player_utils.h"
 #include <QSettings>
 #include <QDir>
 #include <QDebug>
 
-SwUpdateDataModel::SwUpdateDataModel(QObject *parent) : QObject(parent)
+PlayerUiData::PlayerUiData(QObject *parent) : QObject(parent)
 {
 }
 
-SwUpdateDataModel::~SwUpdateDataModel()
+PlayerUiData::~PlayerUiData()
 {
 
 }
 
-void SwUpdateDataModel::checkForSwUpdate()
+void PlayerUiData::checkForSwUpdate()
 {
     emit checkForSwUpdateStarted();
-    IRequest *request = new GetUpgradeJsonRequest(this);
-    connect(request, &IRequest::requestCompleted, this, [this, request](IRequest::Status status) {
+    IPlayerNetworkRequest *request = new PlayerHcGetUpgradeJson(this);
+    connect(request, &IPlayerNetworkRequest::requestCompleted, this, [this, request](IPlayerNetworkRequest::Status status) {
         switch (status)
         {
-        case IRequest::Status::TimedOut:
+        case IPlayerNetworkRequest::Status::TimedOut:
         {
             qDebug() << "Request to get upgrade json timed out";
             emit checkForSwUpdateCompleted(false, "Request to get upgrade json timed out");
             break;
         }
-        case IRequest::Status::Success:
+        case IPlayerNetworkRequest::Status::Success:
         {
             SwUpdateInfo_t swUpdateInfo;
             swUpdateInfo._VersionInfo._MajorNumber = qApp->hCasterInfo()->UpgradeInfo.MajorVersion;
@@ -53,7 +53,7 @@ void SwUpdateDataModel::checkForSwUpdate()
             }
             break;
         }
-        case IRequest::Status::Failed:
+        case IPlayerNetworkRequest::Status::Failed:
         {
             qDebug() << "Request to get upgrade json failed";
             emit checkForSwUpdateCompleted(false, "Request to get upgrade json failed");
@@ -66,28 +66,28 @@ void SwUpdateDataModel::checkForSwUpdate()
     request->execute();
 }
 
-void SwUpdateDataModel::performDownload()
+void PlayerUiData::performDownload()
 {
     emit binaryDownloadStarted();
-    IRequest *request = new GetBinaryImageRequest(this);
-    connect(request, &IRequest::downloadProgress, this, &SwUpdateDataModel::downloadProgressChanged);
-    connect(request, &IRequest::requestCompleted, this, [this, request](IRequest::Status status) {
+    IPlayerNetworkRequest *request = new PlayerHcGetUpgradeImage(this);
+    connect(request, &IPlayerNetworkRequest::downloadProgress, this, &PlayerUiData::downloadProgressChanged);
+    connect(request, &IPlayerNetworkRequest::requestCompleted, this, [this, request](IPlayerNetworkRequest::Status status) {
         switch (status)
         {
-        case IRequest::Status::TimedOut:
+        case IPlayerNetworkRequest::Status::TimedOut:
         {
             qDebug() << "Request to get binary timed out";
             emit binaryDownloadCompleted(false, "Request to get binary timed out");
             break;
         }
-        case IRequest::Status::Success:
+        case IPlayerNetworkRequest::Status::Success:
         {
             qDebug() << "Get binary image request completed";
             emit binaryDownloadCompleted(true, "Request to get binary completed");
             performInstallation();
             break;
         }
-        case IRequest::Status::Failed:
+        case IPlayerNetworkRequest::Status::Failed:
         {
             qDebug() << "Request to get binary failed";
             emit binaryDownloadCompleted(false, "Request to get binary failed");
@@ -100,17 +100,18 @@ void SwUpdateDataModel::performDownload()
     request->execute();
 }
 
-void SwUpdateDataModel::performInstallation()
+void PlayerUiData::performInstallation()
 {
     emit swUpdateInstallationStarted();
     // Take backup of existing binary
     QString appExeFile = QCoreApplication::applicationFilePath();
     QString backupFile = appExeFile + ".bkp";
+    QFile::remove(backupFile);
     QFile::rename(appExeFile, backupFile);
     emit swUpdateInstallationProgressChanged(10);
 
     // Copy new binary
-    QFile downloadedFile("/tmp/" + QCoreApplication::applicationName());
+    QFile downloadedFile("/home/savi/project/" + QCoreApplication::applicationName());
     if (! downloadedFile.exists())
     {
         qDebug() << "File " << downloadedFile.fileName() << " not found. Installation aborted.";
@@ -169,7 +170,14 @@ void SwUpdateDataModel::performInstallation()
     emit swUpdateInstallationCompleted(true, "Software installation completed.");
 }
 
-const SwUpdateInfo_t &SwUpdateDataModel::swUpdateInfo() const
+void PlayerUiData::updateError(QString ErrorMessage)
+{
+    errorInfo_t errorInfo;
+    errorInfo._ErrorInfo = ErrorMessage;
+    emit errorOccured(errorInfo);
+}
+
+const SwUpdateInfo_t &PlayerUiData::swUpdateInfo() const
 {
     return m_swUpdateInfo;
 }

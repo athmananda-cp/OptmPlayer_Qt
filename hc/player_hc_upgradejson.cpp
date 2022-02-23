@@ -1,6 +1,6 @@
-#include "requests.h"
+#include "network/player_network_requests.h"
 #include "player.h"
-#include "networkmanager.h"
+#include "network/player_network_manager.h"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -12,25 +12,14 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 
-#ifdef DUMMY_SERVER_DATA
-#define RESPONSE \
-"{" \
-  "\"imageName\": \"OptmPlayer_2.12.3_28-Oct-2021_01-53-05.apk\"," \
-  "\"majorVersion\": 1, "\
-  "\"minorVersion\": 2, "\
-  "\"listOfChanges\": [ "\
-    "\"1. Lag time reduced to 0.2 milliseconds\n\", \"2. WiFi connectivity improved\n\", \"3. Minor bugs have been rectified\n\", \"4. Visual enhancements made\n\", \"5. Various performance improvements\" "\
-  "]" \
-"}"
-#endif
 
-GetUpgradeJsonRequest::GetUpgradeJsonRequest(QObject *parent)
-    : IRequest(parent)
+PlayerHcGetUpgradeJson::PlayerHcGetUpgradeJson(QObject *parent)
+    : IPlayerNetworkRequest(parent)
 {
 
 }
 
-void GetUpgradeJsonRequest::execute()
+void PlayerHcGetUpgradeJson::execute()
 {
     for (auto objInfo : qApp->hCasterInfo()->ObjectInfoList)
     {
@@ -40,13 +29,8 @@ void GetUpgradeJsonRequest::execute()
         if (objInfo.Url.endsWith("upgrade.json"))
         {
             qDebug() << "Upgrade json URL : " << objInfo.Url;
-#ifdef DUMMY_SERVER_DATA
-            QByteArray data = QString(RESPONSE).toUtf8();
-            handleResponse(data);
-#else
             QNetworkRequest request(QUrl(objInfo.Url));
             m_nwAccessManager->get(request);
-#endif
             return;
         }
     }
@@ -54,13 +38,13 @@ void GetUpgradeJsonRequest::execute()
     emit requestCompleted(Status::Failed);
 }
 
-void GetUpgradeJsonRequest::onFinished(QNetworkReply *reply)
+void PlayerHcGetUpgradeJson::onFinished(QNetworkReply *reply)
 {
     // Process reply
     QUrl url = reply->url();
     if (reply->error())
     {
-        qDebug() << "Error in GetUpgradeJsonRequest "
+        qDebug() << "Error in PlayerHcGetUpgradeJson "
                  << url.toEncoded().constData()
                  << qPrintable(reply->errorString());
 
@@ -73,7 +57,7 @@ void GetUpgradeJsonRequest::onFinished(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-void GetUpgradeJsonRequest::handleResponse(QByteArray response)
+void PlayerHcGetUpgradeJson::handleResponse(QByteArray response)
 {
     if (response.isEmpty())
     {
@@ -123,7 +107,7 @@ void GetUpgradeJsonRequest::handleResponse(QByteArray response)
             qApp->hCasterInfo()->UpgradeInfo.UpgradeImageObjectInfo = infoObj;
             QString strVersionInfo = jObjRoot["Version"].toString();
             QStringList versionNumbers = strVersionInfo.split(".");
-        qDebug() << "versionNumbers.length() " <<  versionNumbers.length() << strVersionInfo;
+            qDebug() << "versionNumbers.length() " <<  versionNumbers.length() << strVersionInfo;
             if (versionNumbers.length() >= 3)
             {
                 qApp->hCasterInfo()->UpgradeInfo.MajorVersion        = versionNumbers[0].toInt();

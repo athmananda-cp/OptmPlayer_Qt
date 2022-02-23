@@ -14,6 +14,12 @@ ApplicationWindow {
     color: "#86c4eb"
     title: "OptmPlayer"
 
+    Component.onCompleted: {
+
+        //playbackurl = playbackIp
+        console.log('**************playbackIp: ' + playbackurl)
+    }
+
     Rectangle {
         id: vidwidget
         width: 720
@@ -24,8 +30,7 @@ ApplicationWindow {
 
         VlcVideoPlayer {
             anchors.fill: parent
-//            url: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
-            url: "http://192.168.1.4/hls/56-5003/index.m3u8"
+            url: playbackurl
         }
     }
 
@@ -66,11 +71,16 @@ ApplicationWindow {
             var object = updteInfo.createObject(rootWindow)
             object.listOfChanges = swUpdateInfoViewModel.enhancements
         }
+		
+
+        onErrorOccured : {
+            console.log("-------------------> onErrorOccured ....",swUpdateInfoViewModel.errorInfo)
+            var updteInfo = Qt.createComponent("qrc:/qml/UpdateErrorDialog.qml")
+            var object = updteInfo.createObject(rootWindow)
+            object.listOfError = swUpdateInfoViewModel.errorInfo
+        }
+     
+
     }
     // ----------------------------------------------------------------------------
 }
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/
